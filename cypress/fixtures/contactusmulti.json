@@ -1,0 +1,21 @@
+[
+    {
+        "firstName" : "Suraj 1",
+        "lastName" : "Dadas 1",
+        "email" : "dadas96@gmail.com",
+        "message" : "I am learning javascript"
+    },
+    {
+        "firstName" : "Suraj 2",
+        "lastName" : "Dadas 2",
+        "email" : "suraj96@gmail.com",
+        "message" : "I am learning javascript"
+    },
+    {
+        "firstName" : "Suraj 3",
+        "lastName" : "Dadas 3",
+        "email" : "surajdadas96@gmail.com",
+        "message" : "I am learning javascript"
+    }
+ 
+]

@@ -1,0 +1,23 @@
+
+
+
+**********   Shadow DOM = A DOM inside DOM     **********
+--------------------------------------------------------------
+                         Method 1
+
+    --  Like iFrame firstly we have to get  SHADOW ROUTE(OPEN)  element in html code
+    --  then check the mode of SHADOW ROUTE is OPEN Or CLOSED  
+    **  if CLOSED then we have to ask developer to make it as OPEN 
+    --  And then select the element exactly Present above SHADOW ROUTE(OPEN)
+    --  after geting element use   .shadow()    method and 
+    --  then TRAVERSE the element normally and then add EVENT or VALIDATE
+
+--------------------------------------------------------------
+                         Method 2
+
+    **  if we don't want to use .shadow()  method 
+    --  for that add this line in Cypress.json File       "includeShadowDom" : "True"
+    --  after including we don't have to use .shadow() method just traverse normally
+    --  but above process should have to follow
+
+--------------------------------------------------------------

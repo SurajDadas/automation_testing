@@ -1,0 +1,139 @@
+
+
+This article explains three different approaches to run your Cypress automation 
+tests in different environments. Below are 3 different methods.
+
+1.   Configure Cypress to Run On Different Environments using baseUrl in cypress.json.
+2.   Setup multiple Environments in Cypress by Creating separate Cypress configuration files for each environment.
+3.   Run your Cypress tests in multiple environments with Cypress Environment Variable and Custom Utility class.
+
+----------------------------------------------------------------------------
+Method 1.   Configure Cypress to Run On Different Environments using baseUrl in cypress.json.
+
+    Step 1: Navigate to The cypress.json File Located in Your Project Folder
+
+    Step2:  Open the cypress.json File and Add The Cypress baseUrl
+            "baseUrl":"https://www.qa-website.com"
+
+    Step 3: Access baseURL in Your Spec
+            describe('Example of BaseUrl', () => {
+                it('Example of Baseurl', () => {
+                     let url = Cypress.config().baseUrl; //accesing baseUrl
+                     cy.visit(url); //passing url value to cy.visit()
+                }); 
+            });
+
+    Step 4: Use Cypress Command Line (aka Cypress CLI) to Pass baseUrl Dynamically
+            1. Run your Cypress tests on a staging environment, passing the staging environment URL:
+               npx cypress run --config baseUrl="https://www.staging-website.com/"
+            
+            2. Run your Cypress tests on a production environment, passing the production environment URL:
+               npx cypress run --config baseUrl="https://www.production-website.com/"
+
+
+----------------------------------------------------------------------------
+Method 2.   Setup multiple Environments in Cypress by Creating separate Cypress configuration files for each environment.
+
+    Step 1: Create Your Own Cypress Config File in The Root Folder (Extension Should be .json)
+              Navigate to Root of  Project Folder create two Cypress config files with an extension of .json,
+              That is staging-config.jsonand production-config.json.
+
+    Step 2: Change Cypress baseUrl settings in the newly created Cypress configuration files
+            1. So, to override default Cypress baseUrl settings in staging-config.json we need to add code like below:
+               {
+                   "extends": "./cypress.json",
+                   "baseUrl": "https://www.staging-website.com"
+                }
+            
+            2. To override default Cypress baseUrl settings in production-config.json we need to add code like below:
+               {
+                   "extends": "./cypress.json",
+                   "baseUrl": "https://www.production-website.com"
+                }
+
+    Step 3: Create a Cypress Spec File and 
+            Use Cypress.config().baseUrl Command to Access the baseURL.
+
+            //my.spec.ts
+            describe('Example of BaseUrl', () => {
+                it('Example of Baseurl', () => {
+                       let url = Cypress.config().baseUrl;
+                       cy.visit(url);
+                });
+            });
+
+    Step 4: Run Your Cypress Tests on Multiple Environments Using Cypress Command-line aka Cypress CLI
+            1. Run your Cypress specs on a staging environment with the below command:
+               npx cypress run --config-file staging-config.json
+
+            2. Run your Cypress specs on a production environment with the below command:
+               npx cypress run --config-file production-config.json
+
+
+----------------------------------------------------------------------------
+Method 3: Run Your Cypress Tests in Multiple Environments With Cypress Environment Variable and Custom Utility Class
+
+    Step 1: Create a Utility File
+        Create a utility.ts file in your project, you can create any location if you wish, 
+        but I recommend creating this Cypress utility file in your cypress/support folder.
+
+    Step 2: Add Code to Return URL Based on Cypress Environment Variable Value
+            //utility.ts
+            export class Utility {
+            getBaseUrl() {
+                let envi = Cypress.env('ENV'); //Get the value of evnironment variable i.e ENV
+                    if (envi == 'production') //Check the value
+                        return "https://www.proudction-website.com"; //return desired url
+                    else if (envi == 'staging')
+                        return "https://staging-website.com";
+                    else if (envi == 'qa')
+                        return "http://qa-website.com";
+                }
+            }
+    
+    Step 3: Create a Spec File and Use the Environment URL
+            //my.spec.ts
+                import { Utility } from "../../../support/utility"            //Import Utility from support folder
+                const url = new Utility().getBaseUrl();                       //Call getBaseUrl() to get environment specific url value
+                describe('Verify Environment Config' + url, () => {
+                    it('Verify Environment', () => {
+                       cy.visit(url); //use url variable
+                    });
+                });
+
+    Step 4: Run the Cypress Test in The Command Line by Specifying the Cypress Environment Variable
+        1. Run your Cypress test on the production environment using the below command:
+           npx cypress run  --env ENV="production"
+
+        2. Run your  Cypress test on the staging environment using the below command:
+           npx cypress run  --env ENV="staging"
+
+
+    Alternatively, You can configure shortcuts to your Cypress project pacakge.json. 
+    Below is the example code:
+     
+    {
+       "scripts": {
+            "cy:run:prod":"cypress run  --env ENV=production"
+            "cy:run:stg":"cypress run  --env ENV=staging"
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
