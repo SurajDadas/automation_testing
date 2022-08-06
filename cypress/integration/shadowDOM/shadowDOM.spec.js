@@ -28,6 +28,21 @@ describe('Shadow DOM', function () {
         cy.get('#shadowHost').find('input[id="name"]').type('Hello')
         // here we not using  .shadow   method as we added   "includeShadowDom" : "True"   in Cypress.json file
     })
+    it('By using JavaScript Method',function(){
+        cy.visit('http://127.0.0.1:5500/cypress/integration/shadowDOM/index.html')
+        cy.get('[onclick="attachShadowDom()"]').click()
+        cy.get('#shadowHost').then(function(el){
+            let [dom] = el.get()
+            expect(dom.shadowRoot.querySelector('h2').textContent).to.eql('I belong to Shadow DOM')
+            })
+    })
+
+    it.only('Without using .shadow() method configration added only for Specific Commands not intalled in Cypress.json',function(){
+        cy.visit('http://127.0.0.1:5500/cypress/integration/shadowDOM/index.html')
+        cy.get('[onclick="attachShadowDom()"]').click()
+        cy.get('h2',{includeShadowDom : true}).first().should('have.text','I belong to Shadow DOM')
+        cy.get('#name',{includeShadowDom : true}).type('Suraj').should('have.value','Suraj')
+    })
 
 //------------------------------------------------
 
