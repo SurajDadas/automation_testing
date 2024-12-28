@@ -8,6 +8,35 @@ describe('Validate iframe', function () {
     }
 
 
+    it.only('Verify iframe',function(){
+        cy.visit('https://demo.automationtesting.in/Frames.html')
+        cy.get('#singleframe').then(function(iframe){
+            let bdy = iframe.contents().find('body')
+            cy.wrap(bdy).as('body')
+            cy.get('@body').within(function(){
+                cy.get('[type="text"]').first().type('Suraj')
+            })
+        })
+    })
+
+    it.only('Verify iframe',function(){
+        cy.visit('https://demo.automationtesting.in/Frames.html')
+        cy.contains('Iframe with in an Iframe').click({force : true})
+
+        cy.get('iframe[style="float: left;height: 300px;width:600px"]').then(function(iframe){
+            let bdy = iframe[0].contentDocument.body
+            cy.wrap(bdy).as('body')
+            cy.get('@body').within(function(){
+                cy.get('iframe[style="float: left;height: 250px;width: 400px"]').then(function(iframe){
+                    let bdy = iframe[0].contentDocument.body
+                    cy.wrap(bdy).as('body')
+                    cy.get('@body').within(function(){
+                        cy.get('[type="text"]').last().type('Suraj Dadas')
+                    })
+                })
+            })
+        })
+    })
 
     it('Test Case 1 : Validate iframe by using jquery', function () {
         cy.visit('http://www.webdriveruniversity.com/IFrame/index.html')
